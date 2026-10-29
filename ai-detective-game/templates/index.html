@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Detective</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <h1>🕵️ AI Detective</h1>
+  <span id="ai-badge" class="badge">checking AI…</span>
+</header>
+
+<div id="toast" class="toast hidden"></div>
+
+<!-- Start screen -->
+<section id="start" class="screen card">
+  <h2>A new case awaits</h2>
+  <p>Every mystery is written by Generative AI on the spot: the victim, suspects, clues,
+     their dialogue and the ending all change with your choices.</p>
+  <label>Setting / theme for your mystery
+    <input id="theme" maxlength="120" placeholder="e.g. a luxury train crossing the Alps in 1920">
+  </label>
+  <label>Difficulty
+    <select id="difficulty">
+      <option value="easy">Easy (16 turns, 1 red herring)</option>
+      <option value="normal" selected>Normal (12 turns, 1 red herring)</option>
+      <option value="hard">Hard (9 turns, 2 red herrings)</option>
+    </select>
+  </label>
+  <button id="start-btn" class="primary">Generate case</button>
+</section>
+
+<!-- Game screen -->
+<section id="game" class="screen hidden">
+  <div class="topbar card">
+    <div>
+      <h2 id="case-title"></h2>
+      <p id="case-setting" class="muted"></p>
+    </div>
+    <div class="turns"><span id="turns"></span><small>turns left</small></div>
+  </div>
+  <p id="case-intro" class="card intro"></p>
+
+  <div class="grid">
+    <div>
+      <h3>🔍 Search a location <small class="muted">(1 turn)</small></h3>
+      <div id="locations" class="list"></div>
+
+      <h3>🗣️ Suspects <small class="muted">(question = 1 turn)</small></h3>
+      <div id="suspects" class="list"></div>
+
+      <div class="actions">
+        <button id="hint-btn">💡 Ask assistant for a hint (1 turn)</button>
+        <button id="accuse-open" class="danger">⚖️ Make accusation</button>
+      </div>
+    </div>
+
+    <div>
+      <h3>📓 Notebook - clues found</h3>
+      <ul id="clues" class="card notebook"></ul>
+      <h3>📜 Case log</h3>
+      <div id="log" class="card log"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Interrogation dialog -->
+<dialog id="ask-dialog">
+  <form method="dialog" id="ask-form">
+    <h3 id="ask-name"></h3>
+    <p id="ask-role" class="muted"></p>
+    <div id="ask-history" class="log small"></div>
+    <input id="ask-input" maxlength="300" placeholder="Ask anything… e.g. Where were you at midnight?" autocomplete="off">
+    <div class="row">
+      <button type="button" id="ask-close">Close</button>
+      <button type="submit" class="primary" id="ask-send">Ask</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Accusation dialog -->
+<dialog id="accuse-dialog">
+  <form method="dialog" id="accuse-form">
+    <h3>Who did it?</h3>
+    <select id="accuse-suspect"></select>
+    <textarea id="accuse-reason" rows="4" maxlength="1000"
+      placeholder="Explain the motive, method and the evidence that proves it…"></textarea>
+    <div class="row">
+      <button type="button" id="accuse-close">Cancel</button>
+      <button type="submit" class="danger" id="accuse-send">Accuse!</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- End screen -->
+<section id="end" class="screen card hidden">
+  <h2 id="end-title"></h2>
+  <p id="end-epilogue" class="intro"></p>
+  <p><b>Assessment:</b> <span id="end-feedback"></span></p>
+  <p><b>The truth:</b> <span id="end-solution"></span></p>
+  <p class="score">Score: <b id="end-score"></b> - <span id="end-rank"></span></p>
+  <button id="again-btn" class="primary">Play another case</button>
+</section>
+
+<div id="loading" class="loading hidden"><div class="spinner"></div><p id="loading-text">The AI is thinking…</p></div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
